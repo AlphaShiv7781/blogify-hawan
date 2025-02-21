@@ -9,7 +9,9 @@ const Signup = () => {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
-  const [inputValue , setInputValue]= useState<string>(""); 
+  const [nameInputValue , setNameInputValue]= useState<string>(""); 
+  const [emailInputValue , setEmailInputValue]= useState<string>(""); 
+  const [passwordInputValue , setPasswordInputValue]= useState<string>(""); 
 
 
   useEffect(() => {
@@ -35,20 +37,20 @@ const Signup = () => {
             <form action="#" method="POST" className="space-y-6">
 
 
-              <CustomInput value={inputValue}
+              <CustomInput value={nameInputValue}
               name={"name"}
               placeholder={"Enter your name"}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => setNameInputValue(e.target.value)}
               type={"text"}
               required={true}
               id={"name"} htmlFor={"Name"} label={"Name"}              /> 
               
 
 
-              <CustomInput value={inputValue}
+              <CustomInput value={emailInputValue}
               name={"email"}
               placeholder={"Enter your email"}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => setEmailInputValue(e.target.value)}
               type={"text"}
               required={true}
               id={"email"} htmlFor={"Email"} label={"E-mail"}              /> 
@@ -57,10 +59,10 @@ const Signup = () => {
 
 
                <CustomInput 
-                value={inputValue}
+                value={passwordInputValue}
                 name={"password"}
                 placeholder={"Enter your password"}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => setPasswordInputValue(e.target.value)}
                 type={"text"}
                 required={true}
                 id={"password"} htmlFor={"password"} label={"Password"}                />  

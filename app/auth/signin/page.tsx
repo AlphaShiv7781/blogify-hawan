@@ -13,7 +13,8 @@ const Signup = () => {
          setIsClient(true); // Ensures this runs only on the client
        }, []);
 
-     const [inputValue , setInputValue]= useState<string>("");   
+     const [emailInputValue , setEmailInputValue]= useState<string>("");   
+     const [passwordInputValue , setPasswordInputValue]= useState<string>(""); 
 
   return (
     <div className="flex justify-center mt-16">
@@ -33,20 +34,20 @@ const Signup = () => {
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form action="#" method="POST" className="space-y-6">
 
-            <CustomInput value={inputValue}
+            <CustomInput value={emailInputValue}
               name={"email"}
               placeholder={"Enter your email"}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => setEmailInputValue(e.target.value)}
               type={"text"}
               required={true}
               id={"email"} htmlFor={"email"} label={"E-mail"}            
             /> 
               
               
-              <CustomInput value={inputValue}
+              <CustomInput value={passwordInputValue}
               name={"password"}
               placeholder={"Enter your password"}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => setPasswordInputValue(e.target.value)}
               type={"text"}
               required={true}
               id={"password"} htmlFor={"password"} label={"Password"}             
