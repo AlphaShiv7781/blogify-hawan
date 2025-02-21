@@ -1,6 +1,8 @@
 "use client";
 import React , { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import CustomInput from "@/app/components/CustomInput";
+import AuthButton from "@/app/components/AuthButton";
 
 const Signup = () => {
 
@@ -10,6 +12,8 @@ const Signup = () => {
        useEffect(() => {
          setIsClient(true); // Ensures this runs only on the client
        }, []);
+
+     const [inputValue , setInputValue]= useState<string>("");   
 
   return (
     <div className="flex justify-center mt-16">
@@ -28,55 +32,28 @@ const Signup = () => {
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form action="#" method="POST" className="space-y-6">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-900">
-                  Email address
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="Enter your email"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-black placeholder:text-gray-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                  />
-                </div>
-              </div>
 
-              <div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-900">
-                    Password
-                  </label>
-                  <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    autoComplete="current-password"
-                    placeholder="Enter your password"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-black border border-black placeholder:text-gray-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                  />
-                </div>
-              </div>
+            <CustomInput value={inputValue}
+              name={"email"}
+              placeholder={"Enter your email"}
+              onChange={(e) => setInputValue(e.target.value)}
+              type={"text"}
+              required={true}
+              id={"email"} htmlFor={"email"} label={"E-mail"}            
+            /> 
+              
+              
+              <CustomInput value={inputValue}
+              name={"password"}
+              placeholder={"Enter your password"}
+              onChange={(e) => setInputValue(e.target.value)}
+              type={"text"}
+              required={true}
+              id={"password"} htmlFor={"password"} label={"Password"}             
+            /> 
 
-              <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Sign in
-                </button>
-              </div>
+              
+             <AuthButton buttonAction={"Sign In"}/>
             </form>
 
             <p className="mt-10 text-center text-sm text-gray-500">
