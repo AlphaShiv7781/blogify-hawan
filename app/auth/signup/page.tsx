@@ -1,26 +1,37 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import CustomInput from "@/app/components/CustomInput"; 
+import CustomInput from "@/app/components/CustomInput";
 import AuthButton from "@/app/components/AuthButton";
-  
+import { registerUser } from "@/lib/api";
+
 const Signup = () => {
-
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
 
-  const [nameInputValue , setNameInputValue]= useState<string>(""); 
-  const [emailInputValue , setEmailInputValue]= useState<string>(""); 
-  const [passwordInputValue , setPasswordInputValue]= useState<string>(""); 
+  // State variables for form inputs
+  const [nameInputValue, setNameInputValue] = useState<string>("");
+  const [emailInputValue, setEmailInputValue] = useState<string>("");
+  const [passwordInputValue, setPasswordInputValue] = useState<string>("");
+  const [error, setError] = useState<string | null>(null); // Error handling
 
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null); // Reset previous errors
 
-  useEffect(() => {
-    setIsClient(true); // Ensures this runs only on the client
-  }, []);
+    try {
+      // Call the API to register the user
+      await registerUser(nameInputValue, emailInputValue, passwordInputValue);
+      alert("Account created successfully! Redirecting to Sign In.");
+      router.push("/auth/signin"); // Redirect after successful signup
+    } catch (err) {
+      setError("Signup failed. Please check your details and try again."); // Set error message
+    }
+  };
 
   return (
     <div className="flex justify-center mt-16">
-      <div style={{ width: '30%' }}>
+      <div style={{ width: "30%" }}>
         <div className="shadow-lg flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-white">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
@@ -34,47 +45,59 @@ const Signup = () => {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-6">
+            {/* Display error message if signup fails */}
+            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <CustomInput
+                value={nameInputValue}
+                name={"name"}
+                placeholder={"Enter your name"}
+                onChange={(e) => setNameInputValue(e.target.value)}
+                type={"text"}
+                required={true}
+                id={"name"}
+                htmlFor={"name"}
+                label={"Name"}
+              />
 
-              <CustomInput value={nameInputValue}
-              name={"name"}
-              placeholder={"Enter your name"}
-              onChange={(e) => setNameInputValue(e.target.value)}
-              type={"text"}
-              required={true}
-              id={"name"} htmlFor={"Name"} label={"Name"}              /> 
-              
+              <CustomInput
+                value={emailInputValue}
+                name={"email"}
+                placeholder={"Enter your email"}
+                onChange={(e) => setEmailInputValue(e.target.value)}
+                type={"text"}
+                required={true}
+                id={"email"}
+                htmlFor={"email"}
+                label={"E-mail"}
+              />
 
-
-              <CustomInput value={emailInputValue}
-              name={"email"}
-              placeholder={"Enter your email"}
-              onChange={(e) => setEmailInputValue(e.target.value)}
-              type={"text"}
-              required={true}
-              id={"email"} htmlFor={"Email"} label={"E-mail"}              /> 
-
-              
-
-
-               <CustomInput 
+              <CustomInput
                 value={passwordInputValue}
                 name={"password"}
                 placeholder={"Enter your password"}
                 onChange={(e) => setPasswordInputValue(e.target.value)}
-                type={"text"}
+                type={"password"} // Use "password" type for security
                 required={true}
-                id={"password"} htmlFor={"password"} label={"Password"}                />  
+                id={"password"}
+                htmlFor={"password"}
+                label={"Password"}
+              />
 
-              <AuthButton buttonAction={"Sign up"} /> 
-              
+              {/* Custom Button for Form Submission */}
+              <AuthButton buttonAction={"Sign up"} />
             </form>
 
+            {/* Redirect to Sign In Page */}
             <p className="mt-10 text-center text-sm text-gray-500">
-              Already have an account?{' '}
-              <span className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
-              onClick={()=>{router.push('/auth/signin')}}>
+              Already have an account?{" "}
+              <span
+                className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                onClick={() => {
+                  router.push("/auth/signin");
+                }}
+              >
                 Sign in
               </span>
             </p>

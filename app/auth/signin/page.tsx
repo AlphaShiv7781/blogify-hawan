@@ -1,24 +1,39 @@
 "use client";
-import React , { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import CustomInput from "@/app/components/CustomInput";
 import AuthButton from "@/app/components/AuthButton";
+import { loginUser } from "@/lib/api";
 
-const Signup = () => {
+const Signin = () => {
+  const router = useRouter();
 
-     const router = useRouter();
-       const [isClient, setIsClient] = useState(false);
-     
-       useEffect(() => {
-         setIsClient(true); // Ensures this runs only on the client
-       }, []);
+  
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-     const [emailInputValue , setEmailInputValue]= useState<string>("");   
-     const [passwordInputValue , setPasswordInputValue]= useState<string>(""); 
+  const [emailInputValue, setEmailInputValue] = useState<string>("");
+  const [passwordInputValue, setPasswordInputValue] = useState<string>("");
+  const [error, setError] = useState<string | null>(null); 
+
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); 
+    setError(null); 
+
+    try {
+      await loginUser(emailInputValue, passwordInputValue); 
+      router.push("/dashboard"); 
+    } catch (err) {
+      setError("Invalid email or password. Please try again."); 
+    }
+  };
 
   return (
     <div className="flex justify-center mt-16">
-      <div style={{ width: '30%' }}>
+      <div style={{ width: "30%" }}>
         <div className="shadow-lg flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-white">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
@@ -32,35 +47,47 @@ const Signup = () => {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-6">
+           
+            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-            <CustomInput value={emailInputValue}
-              name={"email"}
-              placeholder={"Enter your email"}
-              onChange={(e) => setEmailInputValue(e.target.value)}
-              type={"text"}
-              required={true}
-              id={"email"} htmlFor={"email"} label={"E-mail"}            
-            /> 
-              
-              
-              <CustomInput value={passwordInputValue}
-              name={"password"}
-              placeholder={"Enter your password"}
-              onChange={(e) => setPasswordInputValue(e.target.value)}
-              type={"text"}
-              required={true}
-              id={"password"} htmlFor={"password"} label={"Password"}             
-            /> 
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <CustomInput
+                value={emailInputValue}
+                name={"email"}
+                placeholder={"Enter your email"}
+                onChange={(e) => setEmailInputValue(e.target.value)}
+                type={"text"}
+                required={true}
+                id={"email"}
+                htmlFor={"email"}
+                label={"E-mail"}
+              />
+
+              <CustomInput
+                value={passwordInputValue}
+                name={"password"}
+                placeholder={"Enter your password"}
+                onChange={(e) => setPasswordInputValue(e.target.value)}
+                type={"password"} 
+                required={true}
+                id={"password"}
+                htmlFor={"password"}
+                label={"Password"}
+              />
 
               
-             <AuthButton buttonAction={"Sign In"}/>
+              <AuthButton buttonAction={"Sign In"} />
             </form>
 
+            
             <p className="mt-10 text-center text-sm text-gray-500">
-              Don't have an account?{' '}
-              <span  className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
-               onClick={()=>{router.push('/auth/signup')}}>
+              Don't have an account?{" "}
+              <span
+                className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                onClick={() => {
+                  router.push("/auth/signup");
+                }}
+              >
                 Sign Up
               </span>
             </p>
@@ -71,4 +98,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;
