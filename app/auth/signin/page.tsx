@@ -17,6 +17,7 @@ const Signin = () => {
   const [emailInputValue, setEmailInputValue] = useState<string>("");
   const [passwordInputValue, setPasswordInputValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null); 
+  
 
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,7 +25,7 @@ const Signin = () => {
     setError(null); 
 
     try {
-      await loginUser(emailInputValue, passwordInputValue); 
+      const response = await loginUser(emailInputValue, passwordInputValue); 
       router.push("/dashboard"); 
     } catch (err) {
       setError("Invalid email or password. Please try again."); 
