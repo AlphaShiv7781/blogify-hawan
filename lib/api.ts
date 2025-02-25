@@ -8,7 +8,7 @@ export async function loginUser(email: string, password: string) {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include",
+    credentials: "include", // Include cookies
     body: JSON.stringify({ email, password }),
   });
 
@@ -20,10 +20,9 @@ export async function loginUser(email: string, password: string) {
   }
 
   const data = await response.json();
-  console.log("***********  **********  JWT received from login:", data);
+  console.log("JWT Token Received:", data);
   return data;
 }
-
 
 
 //REGISTER
