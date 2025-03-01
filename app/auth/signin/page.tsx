@@ -25,10 +25,14 @@ const Signin = () => {
     setError(null); 
 
     try {
-      const response = await loginUser(emailInputValue, passwordInputValue); 
-      router.push("/dashboard"); 
+      const response = await loginUser(emailInputValue, passwordInputValue);
+      
+      // Add slight delay before redirect
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      router.push("/dashboard");
     } catch (err) {
-      setError("Invalid email or password. Please try again."); 
+      setError("Invalid email or password. Please try again.");
     }
   };
 

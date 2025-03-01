@@ -7,11 +7,15 @@ export async function loginUser(email: string, password: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest"  // Add this header
     },
-    credentials: "include", // Include cookies
+    credentials: "include",
     body: JSON.stringify({ email, password }),
   });
 
+  // Add this cookie check
+  const cookies = response.headers.get('set-cookie');
+  console.log('Received cookies:', cookies);
   console.log("Login response status:", response.status);
   console.log("Response Headers:", response.headers);
 
@@ -45,15 +49,33 @@ export async function registerUser(name: string, email: string, password: string
 
 // Fetch User
 
+const defaultFetchOptions: RequestInit = {
+  credentials: 'include', // Send cookies with every request
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};
+
+// Update fetchUser to use custom fetch
 export async function fetchUser() {
-  const response = await fetch(`${API_URL}user`, {
-    method: "GET",
-    credentials: "include", 
-  });
+  try {
+    const response = await fetch(`${API_URL}user`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error("Unauthenticated");
+    if (response.status === 401) {
+      throw new Error("Unauthenticated");
+    }
+
+    if (!response.ok) {
+      throw new Error("Server error");
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error("Authentication failed");
   }
-
-  return await response.json();
 }
